@@ -44,6 +44,13 @@ func (c *companyRepository) CreateOrUpdate(ctx context.Context, company *model.C
 	}
 
 	// TODO: tuliskan baris code untuk update data company
+	companyModel.Name = company.Name
+	companyModel.Address = company.Address
+	companyModel.Balance = company.Balance
+
+	if err := c.Cfg.Database().WithContext(ctx).Save(companyModel).Error; err != nil {
+		return nil, err
+	}
 
 	return companyModel, nil
 }
@@ -55,6 +62,11 @@ func (c *companyRepository) DebitBalance(ctx context.Context, amount int, note s
 	}
 
 	// TODO: tuliskan baris code untuk mengurangi balance
+	company.Balance -= amount
+
+	if err := c.Cfg.Database().WithContext(ctx).Save(company).Error; err != nil {
+		return err
+	}
 
 	if err := c.Cfg.Database().WithContext(ctx).Model(company).Updates(company).Find(company).Error; err != nil {
 		return err
@@ -79,6 +91,7 @@ func (c *companyRepository) AddBalance(ctx context.Context, balance int) (*model
 	}
 
 	// TODO: tuliskan baris code untuk topup balance
+	company.Balance += balance
 
 	if err := c.Cfg.Database().WithContext(ctx).Model(company).Updates(company).Find(company).Error; err != nil {
 		return nil, err
