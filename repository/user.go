@@ -18,22 +18,33 @@ func (p *userRepository) FindByID(ctx context.Context, id int) (*model.User, err
 
 	// TODO: buat fungsi untuk mencari user berdasarkan ID pada parameter
 
-	panic("implement me ")
-
+	user := &model.User{}
+	if err := p.Cfg.Database().WithContext(ctx).Preload("Position").First(user, id).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (p *userRepository) Create(ctx context.Context, user *model.User) (*model.User, error) {
 	// TODO: buat fungsi untuk membuat user berdasarkan struct parameter
 
-	panic("implement me ")
-
+	if err := p.Cfg.Database().WithContext(ctx).Create(user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (p *userRepository) UpdateByID(ctx context.Context, id int, user *model.User) (*model.User, error) {
 	// TODO: buat fungsi untuk update user berdasarkan struct parameter
 
-	panic("implement me ")
-
+	currentUser, err := p.FindByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	if err := p.Cfg.Database().WithContext(ctx).Model(currentUser).Updates(user).Error; err != nil {
+		return nil, err
+	}
+	return currentUser, nil
 }
 
 func (p *userRepository) Delete(ctx context.Context, id int) error {
