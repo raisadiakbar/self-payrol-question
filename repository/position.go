@@ -45,12 +45,25 @@ func (p *positionRepository) UpdateByID(ctx context.Context, id int, position *m
 func (p *positionRepository) Delete(ctx context.Context, id int) error {
 
 	// TODO: Buat fungsi untuk mengapus posisi
-	panic("impelement me")
-
+	if err := p.Cfg.Database().
+		WithContext(ctx).
+		Delete(&model.Position{}, "id = ?", id).
+		Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *positionRepository) Fetch(ctx context.Context, limit, offset int) ([]*model.Position, error) {
 
 	// TODO: Buat fungsi untuk mendapatkan data position berdasarkan parameter
-	panic("impelement me")
+	var positions []*model.Position
+	if err := p.Cfg.Database().
+		WithContext(ctx).
+		Limit(limit).
+		Offset(offset).
+		Find(&positions).Error; err != nil {
+		return nil, err
+	}
+	return positions, nil
 }
