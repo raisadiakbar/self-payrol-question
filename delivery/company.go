@@ -26,7 +26,8 @@ func (comp *companyDelivery) Mount(group *echo.Group) {
 	// TODO:
 	// 1. Buatlah handler yang mengarah ke fungsi comp.GetDetailCompanyHandler
 	// 2. Buatlah handler yang mengarah ke fungsi comp.UpdateOrCreateCompanyHandler
-
+	group.GET("/company", comp.GetDetailCompanyHandler)
+	group.POST("/company", comp.UpdateOrCreateCompanyHandler)
 	group.POST("/topup", comp.TopupBalanceHandler)
 
 }
@@ -69,8 +70,18 @@ func (comp *companyDelivery) TopupBalanceHandler(e echo.Context) error {
 	ctx := e.Request().Context()
 
 	//TODO: lakukan validasi request disini
+	var req request.TopupCompanyBalance
 
-	company, i, err := comp.companyUsecase.TopupBalance(ctx)
+	if err := e.Bind(&req); err != nil {
+		return helper.ResponseValidationErrorJson(e, "Error binding struct", err.Error())
+	}
+
+	if err := req.Validate(); err != nil {
+		errVal := err.(validation.Errors)
+		return helper.ResponseValidationErrorJson(e, "Error validation", errVal)
+	}
+
+	company, i, err := comp.companyUsecase.TopupBalance(ctx, req)
 	if err != nil {
 		return helper.ResponseErrorJson(e, i, err)
 	}
