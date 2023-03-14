@@ -107,9 +107,18 @@ func (p *positionDelivery) EditPositionHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	//TODO: lakukan validasi request disini
-
 	id := c.Param("id")
 	IdInt, _ := strconv.Atoi(id)
+
+	var req request.PositionRequest
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusUnprocessableEntity, err.Error())
+	}
+
+	if err := req.Validate(); err != nil {
+		errVal := err.(validation.Errors)
+		return helper.ResponseValidationErrorJson(c, "Error validation", errVal)
+	}
 
 	position, err := p.positionUsecase.EditPosition(ctx, IdInt, &req)
 	if err != nil {
