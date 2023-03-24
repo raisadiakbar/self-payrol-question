@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
-	"github.com/labstack/gommon/log"
 	"self-payrol/config"
 	"sync"
+
+	"github.com/joho/godotenv"
+	"github.com/labstack/gommon/log"
 )
 
 func main() {
