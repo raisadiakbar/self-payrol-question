@@ -16,3 +16,13 @@ Untuk menjalankan aplikasi lakukan perintah berikut
 3. `go run main.go`
 
 Daftar endpoint ada di postman documenter yang di sertakan
+
+## Building a web where employees can make monthly salary withdrawals independently.
+
+Developed and implemented scalable API endpoints using Go Lang, resulting in a 20% increase in system efficiency.
+
+Conducted thorough testing and debugging of web applications, ensuring smooth operation and minimal downtime.
+
+Collaborated with cross-functional teams to design and implement database schema, improving data accuracy and integrity.
+
+Optimized database queries and server-side code, resulting in a 30% reduction in load times and increased user satisfaction.
